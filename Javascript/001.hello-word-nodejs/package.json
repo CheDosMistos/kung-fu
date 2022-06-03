@@ -1,0 +1,15 @@
+{
+  "name": "helloworld",
+  "version": "1.0.0",
+  "description": "Hello world in Node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "helloworld"
+  ],
+  "author": "Alejandro Mallo",
+  "license": "ISC"
+}
