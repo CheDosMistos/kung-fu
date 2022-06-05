@@ -1,8 +1,7 @@
-const arguments = process.argv.slice(2);
-
 let isPalindrome = true; 
 let step = 0;
 
+const arguments = process.argv.slice(2);
 const sentence = arguments[0];
 
 while (sentence[step]!== undefined) {
