@@ -1,3 +1,3 @@
 # Great common divider
 
-Calcula el **Máximo Común Divisor** de forma recursiva de dos números pasados como parámetro.
+Calcula el **Máximo Común Divisor** de forma recursiva de dos números pasados como parámetro en linea de comandos.
