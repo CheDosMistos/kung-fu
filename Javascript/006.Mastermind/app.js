@@ -11,14 +11,14 @@ function initMastermind() {
             do {
                 const game = initGame();
                 game.play();
-            } while (yesNoDialog('¿Quieres jugar de nuevo?'));
+            } while (askYesOrNo('¿Quieres jugar de nuevo?'));
         }
     }
 
-    function yesNoDialog(msg) {
+    function askYesOrNo(msg) {
         const answer = console.readString(`${msg} ("si/no"):`);
         if (answer!=='si' && answer!=='no') {
-            return yesNoDialog('Debes seleccionar una de estas dos respuestas');
+            return askYesOrNo('Debes seleccionar una de estas dos respuestas');
         }
         return answer === 'si';
     }
@@ -69,6 +69,7 @@ function initGame() {
             return '\nHas perdido... ¡inténtalo de nuevo!\n';
         }
     }
+
     return {
         play: () => {
             that.secretCombination.generate();
@@ -103,7 +104,7 @@ function initCombination() {
             }
             return false;
         },
-        repeatedColor: () => {
+        hasRepeatedColor: () => {
             for (let i = 0; i < that.colors.length; i++) {
                 for (let j = i+1; j < that.colors.length; j++) {
                     if (that.colors[i]===that.colors[j]) {
@@ -142,7 +143,7 @@ function initCombination() {
             if (!that.areColorsInOptions()) {
                 return 'Hay colores que no pertnenecen al dominio. Opciones: ' + that.COLOR_OPTIONS;
             }
-            if (that.repeatedColor()) {
+            if (that.hasRepeatedColor()) {
                 return 'Hay colores repetidos';
             }
             return '';
