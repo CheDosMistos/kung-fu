@@ -6,7 +6,6 @@ mastermind.play();
 
 function initMastermind() {
     const that = {
-        game: initGame(),
         askYesOrNo() {
             const answer = console.readString(`${msg} ("si/no"):`);
             if (answer!=='si' && answer!=='no') {
@@ -20,7 +19,8 @@ function initMastermind() {
         play() {
             console.writeln(`----- MASTERMIND -----`);
             do {
-                that.game.play();
+                const game = initGame();
+                game.play();
             } while (that.askYesOrNo('¿Quieres jugar de nuevo?'));
         }
     }
