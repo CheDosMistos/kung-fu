@@ -7,7 +7,7 @@ mastermind.play();
 function initMastermind() {
     const that = {
         game: initGame(),
-        askYesOrNo: () => {
+        askYesOrNo() {
             const answer = console.readString(`${msg} ("si/no"):`);
             if (answer!=='si' && answer!=='no') {
                 return that.askYesOrNo('Debes seleccionar una de estas dos respuestas');
@@ -17,7 +17,7 @@ function initMastermind() {
     }
 
     return {
-        play: () => {
+        play() {
             console.writeln(`----- MASTERMIND -----`);
             do {
                 that.game.play();
@@ -32,12 +32,12 @@ function initGame() {
         proposedCombinations: [],
         secretCombination: initCombination(),
         playerCombination: initCombination(),
-        playerMove: () => {
+        playerMove() {
             that.askPlayerCombination();
             that.addProposedCombination(that.playerCombination.get());
             that.showAllProposedCombinations();
         },
-        askPlayerCombination: () => {
+        askPlayerCombination() {
             do {
                 that.playerCombination.set(console.readString(`\nPropón una combinación:`));
                 if (that.playerCombination.getError() !== '') {
@@ -45,26 +45,26 @@ function initGame() {
                 }
             } while (that.playerCombination.getError() !== '');
         },
-        addProposedCombination: playerCombination => {
+        addProposedCombination(playerCombination) {
             that.proposedCombinations[that.proposedCombinations.length] = playerCombination;
         },
-        showAllProposedCombinations: () => {
+        showAllProposedCombinations() {
             for (let i = 0; i < that.proposedCombinations.length; i++) {
                 const results = that.secretCombination.getResult(that.proposedCombinations[i]);
                 console.writeln(`${i + 1} intento${i?'s':' '}: ${that.proposedCombinations[i]} ----> ${results.blacks} blacks + ${results.whites} whites`);
             }
         },
-        isOver: () => {
+        isOver() {
             if (that.proposedCombinations.length >= that.MAX_ATTEMPS) {
                 return true;
             }
             return that.isWinner();
         },
-        isWinner: () => {
+        isWinner() {
             const result = that.secretCombination.getResult(that.playerCombination.get());
             return result.blacks === that.secretCombination.get().length;
         },
-        getGameOverMsg: () => {
+        getGameOverMsg() {
             if (that.isWinner()) {
                 return '\n¡Has ganado!\n';
             }
@@ -73,7 +73,7 @@ function initGame() {
     }
 
     return {
-        play: () => {
+        play() {
             that.secretCombination.generate();
             do {
                 that.playerMove();
@@ -88,14 +88,14 @@ function initCombination() {
         colors: [],
         COLOR_OPTIONS: ['Q', 'W', 'E', 'R', 'T', 'Y'],
         MAX_COLORS: 4,
-        getNewRandomColor: () => {
+        getNewRandomColor() {
             let newColor;
             do {
                 newColor = that.COLOR_OPTIONS[Math.floor(Math.random() * that.COLOR_OPTIONS.length)];
             } while (that.isColorInArray(newColor, that.colors));
             return newColor;
         },
-        isColorInArray: (newColor, colors) => {
+        isColorInArray(newColor, colors) {
             if (colors === undefined) {
                 return false;
             }
@@ -106,7 +106,7 @@ function initCombination() {
             }
             return false;
         },
-        hasRepeatedColor: () => {
+        hasRepeatedColor() {
             for (let i = 0; i < that.colors.length; i++) {
                 for (let j = i+1; j < that.colors.length; j++) {
                     if (that.colors[i]===that.colors[j]) {
@@ -116,7 +116,7 @@ function initCombination() {
             }
             return false;
         },
-        areColorsInOptions: () => {
+        areColorsInOptions() {
             for (const color of that.colors) {
                 if (!that.isColorInArray(color, that.COLOR_OPTIONS)) {
                     return false;
@@ -127,18 +127,18 @@ function initCombination() {
     }
 
     return {
-        set: colors => {
+        set(colors) {
             that.colors = colors.split('');
         },
-        get: () => {
+        get() {
             return that.colors;
         },
-        generate: () => {
+        generate() {
             do {
                 that.colors[that.colors.length] = that.getNewRandomColor();
             } while (that.colors.length < that.MAX_COLORS);
         }, 
-        getError: () => {
+        getError() {
             if (that.colors.length !== that.MAX_COLORS) {
                 return 'La cantidad de colores '+ that.colors.length +' no es '+ that.MAX_COLORS;
             }
@@ -150,7 +150,7 @@ function initCombination() {
             }
             return '';
         },
-        getResult: playerColors => {
+        getResult(playerColors) {
             const totals = {blacks: 0, whites: 0};
             for (let i = 0; i < playerColors.length; i++) {
                 if (playerColors[i] === that.colors[i]) {
