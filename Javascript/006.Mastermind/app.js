@@ -5,22 +5,24 @@ const mastermind = initMastermind();
 mastermind.play();
 
 function initMastermind() {
+    const that = {
+        game: initGame(),
+        askYesOrNo: () => {
+            const answer = console.readString(`${msg} ("si/no"):`);
+            if (answer!=='si' && answer!=='no') {
+                return that.askYesOrNo('Debes seleccionar una de estas dos respuestas');
+            }
+            return answer === 'si';
+        }
+    }
+
     return {
         play: () => {
             console.writeln(`----- MASTERMIND -----`);
             do {
-                const game = initGame();
-                game.play();
-            } while (askYesOrNo('¿Quieres jugar de nuevo?'));
+                that.game.play();
+            } while (that.askYesOrNo('¿Quieres jugar de nuevo?'));
         }
-    }
-
-    function askYesOrNo(msg) {
-        const answer = console.readString(`${msg} ("si/no"):`);
-        if (answer!=='si' && answer!=='no') {
-            return askYesOrNo('Debes seleccionar una de estas dos respuestas');
-        }
-        return answer === 'si';
     }
 }
 
