@@ -1,0 +1,41 @@
+@startuml
+class Mastermind {
+    -askYesOrNo()
+    +play()
+}
+class Game{
+    -MAX_ATTEMPS
+    -proposedCombinations
+    -playerMove()
+    -askPlayerCombination()
+    -addProposedCombination()
+    -showAllProposedCombinations()
+    -isOver()
+    -isWinner()
+    -getGameOverMsg()
+    +play()
+}
+abstract Combination{
+    -colors
+    -COLOR_OPTIONS
+    -MAX_COLORS
+    #isColorInArray()
+    +get()
+    +set()
+}
+class SecretCombination{
+    -getNewRandomColor()
+    +generate()
+    +getResult()
+}
+class PlayerCombination{
+    -hasRepeatedColor()
+    -areColorsInOptions()
+    +getError()
+}
+Mastermind o-- Game
+Game *-- SecretCombination
+Game *-- PlayerCombination
+Combination <|-- SecretCombination
+Combination <|-- PlayerCombination
+@enduml
