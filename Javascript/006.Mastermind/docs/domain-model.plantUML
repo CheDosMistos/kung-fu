@@ -1,4 +1,4 @@
-@startuml
+@startuml ClassModel
 class Mastermind {
     -askYesOrNo()
     +play()
