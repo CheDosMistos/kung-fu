@@ -30,11 +30,6 @@ function initGame() {
         proposedCombinations: [],
         secretCombination: initCombination(),
         playerCombination: initCombination(),
-        playerMove() {
-            that.askPlayerCombination();
-            that.addProposedCombination(that.playerCombination.get());
-            that.showAllProposedCombinations();
-        },
         askPlayerCombination() {
             do {
                 that.playerCombination.set(console.readString(`\nPropón una combinación:`));
@@ -42,9 +37,7 @@ function initGame() {
                     console.writeln(that.playerCombination.getError());
                 }
             } while (that.playerCombination.getError() !== '');
-        },
-        addProposedCombination(playerCombination) {
-            that.proposedCombinations[that.proposedCombinations.length] = playerCombination;
+            that.proposedCombinations[that.proposedCombinations.length] = that.playerCombination.get();
         },
         showAllProposedCombinations() {
             for (let i = 0; i < that.proposedCombinations.length; i++) {
@@ -73,7 +66,8 @@ function initGame() {
         play() {
             that.secretCombination.generate();
             do {
-                that.playerMove();
+                that.askPlayerCombination();
+                that.showAllProposedCombinations();
             } while (!that.isOver());
             console.writeln(that.getGameOverMsg());
         }
