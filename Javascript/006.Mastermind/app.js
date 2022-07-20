@@ -52,13 +52,10 @@ function initGame() {
             if (that.proposedCombinations.length >= that.MAX_ATTEMPS) {
                 return true;
             }
-            return that.isWinner();
-        },
-        isWinner() {
-            return that.secretCombination.getResult(that.playerCombination.get()).blacks === that.secretCombination.get().length;
+            return that.secretCombination.isWinner(that.playerCombination.get());
         },
         getGameOverMsg() {
-            return that.isWinner()?`\n¡Has ganado!\n`:`\nHas perdido... ¡inténtalo de nuevo!\n`;
+            return that.secretCombination.isWinner(that.playerCombination.get())?`\n¡Has ganado!\n`:`\nHas perdido... ¡inténtalo de nuevo!\n`;
         }
     }
 
@@ -128,7 +125,7 @@ function initCombination() {
             do {
                 that.colors[that.colors.length] = that.getNewRandomColor();
             } while (that.colors.length < that.MAX_COLORS);
-        }, 
+        },
         getError() {
             if (that.colors.length !== that.MAX_COLORS) {
                 return `La cantidad de colores ${that.colors.length} no es ${that.MAX_COLORS}`;
@@ -140,6 +137,9 @@ function initCombination() {
                 return `Hay colores repetidos`;
             }
             return ``;
+        },
+        isWinner(playerColors) {
+            return this.getResult(playerColors).blacks === that.colors.length;
         },
         getResult(playerColors) {
             const totals = {blacks: 0, whites: 0};
