@@ -5,12 +5,12 @@ initMastermind().play();
 
 function initMastermind() {
     const that = {
-        askYesOrNo() {
+        askYesOrNo(msg) {
             const answer = console.readString(`${msg} ("si/no"):`);
-            if (answer!=='si' && answer!=='no') {
-                return that.askYesOrNo('Debes seleccionar una de estas dos respuestas');
+            if (answer!==`si` && answer!==`no`) {
+                return that.askYesOrNo(`Debes seleccionar una de estas dos respuestas`);
             }
-            return answer === 'si';
+            return answer === `si`;
         }
     }
 
@@ -19,7 +19,7 @@ function initMastermind() {
             console.writeln(`----- MASTERMIND -----`);
             do {
                 initGame().play();
-            } while (that.askYesOrNo('¿Quieres jugar de nuevo?'));
+            } while (that.askYesOrNo(`¿Quieres jugar de nuevo?`));
         }
     }
 }
@@ -49,7 +49,10 @@ function initGame() {
         showAllProposedCombinations() {
             for (let i = 0; i < that.proposedCombinations.length; i++) {
                 const results = that.secretCombination.getResult(that.proposedCombinations[i]);
-                console.writeln(`${i + 1} intento${i?'s':' '}: ${that.proposedCombinations[i]} ----> ${results.blacks} blacks + ${results.whites} whites`);
+                console.writeln(`${i===9?'':' '}${i + 1} intento${i?'s':' '}: ` + 
+                                `${that.proposedCombinations[i]} ----> ` +
+                                `${results.blacks} black${results.blacks!==1?'s':' '} + ` + 
+                                `${results.whites} white${results.whites!==1?'s':''}`);
             }
         },
         isOver() {
@@ -59,14 +62,10 @@ function initGame() {
             return that.isWinner();
         },
         isWinner() {
-            const result = that.secretCombination.getResult(that.playerCombination.get());
-            return result.blacks === that.secretCombination.get().length;
+            return that.secretCombination.getResult(that.playerCombination.get()).blacks === that.secretCombination.get().length;
         },
         getGameOverMsg() {
-            if (that.isWinner()) {
-                return '\n¡Has ganado!\n';
-            }
-            return '\nHas perdido... ¡inténtalo de nuevo!\n';
+            return that.isWinner()?`\n¡Has ganado!\n`:`\nHas perdido... ¡inténtalo de nuevo!\n`;
         }
     }
 
@@ -107,7 +106,7 @@ function initCombination() {
         hasRepeatedColor() {
             for (let i = 0; i < that.colors.length; i++) {
                 for (let j = i+1; j < that.colors.length; j++) {
-                    if (that.colors[i]===that.colors[j]) {
+                    if (that.colors[i] === that.colors[j]) {
                         return true;
                     }
                 }
@@ -138,15 +137,15 @@ function initCombination() {
         }, 
         getError() {
             if (that.colors.length !== that.MAX_COLORS) {
-                return 'La cantidad de colores '+ that.colors.length +' no es '+ that.MAX_COLORS;
+                return `La cantidad de colores ${that.colors.length} no es ${that.MAX_COLORS}`;
             }
             if (!that.areColorsInOptions()) {
-                return 'Hay colores que no pertnenecen al dominio. Opciones: ' + that.COLOR_OPTIONS;
+                return `Hay colores que no pertnenecen al dominio. Opciones: ${that.COLOR_OPTIONS}`;
             }
             if (that.hasRepeatedColor()) {
-                return 'Hay colores repetidos';
+                return `Hay colores repetidos`;
             }
-            return '';
+            return ``;
         },
         getResult(playerColors) {
             const totals = {blacks: 0, whites: 0};
