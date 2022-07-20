@@ -1,8 +1,7 @@
 const { Console } = require("console-mpds");
 const console = new Console();
 
-const mastermind = initMastermind();
-mastermind.play();
+initMastermind().play();
 
 function initMastermind() {
     const that = {
@@ -19,8 +18,7 @@ function initMastermind() {
         play() {
             console.writeln(`----- MASTERMIND -----`);
             do {
-                const game = initGame();
-                game.play();
+                initGame().play();
             } while (that.askYesOrNo('¿Quieres jugar de nuevo?'));
         }
     }
