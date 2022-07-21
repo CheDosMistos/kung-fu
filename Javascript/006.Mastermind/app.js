@@ -28,8 +28,8 @@ function initGame() {
     const that = {
         MAX_ATTEMPS: 10,
         proposedCombinations: [],
-        secretCombination: initCombination(),
         playerCombination: initCombination(),
+        secretCombination: initCombination(),
         askPlayerCombination() {
             do {
                 that.playerCombination.set(console.readString(`\nPropón una combinación:`));
@@ -74,8 +74,8 @@ function initGame() {
 function initCombination() {
     const that = {
         colors: [],
-        COLOR_OPTIONS: ['Q', 'W', 'E', 'R', 'T', 'Y'],
         MAX_COLORS: 4,
+        COLOR_OPTIONS: ['Q', 'W', 'E', 'R', 'T', 'Y'],
         getNewRandomColor() {
             let newColor;
             do {
