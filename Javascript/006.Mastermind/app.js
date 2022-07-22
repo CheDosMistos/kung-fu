@@ -30,6 +30,7 @@ function initGame() {
         proposedCombinations: [],
         playerCombination: initCombination(),
         secretCombination: initCombination(),
+        result: initResult(),
         askPlayerCombination() {
             do {
                 that.playerCombination.set(console.readString(`\nPropón una combinación:`));
@@ -41,21 +42,21 @@ function initGame() {
         },
         showAllProposedCombinations() {
             for (let i = 0; i < that.proposedCombinations.length; i++) {
-                const results = that.secretCombination.getResult(that.proposedCombinations[i]);
+                that.result.set(that.proposedCombinations[i], that.secretCombination.get());
                 console.writeln(`${i===9?'':' '}${i + 1} intento${i?'s':' '}: ` + 
                                 `${that.proposedCombinations[i]} ----> ` +
-                                `${results.blacks} black${results.blacks!==1?'s':' '} + ` + 
-                                `${results.whites} white${results.whites!==1?'s':''}`);
+                                `${that.result.getBlacks()} black${that.result.getBlacks()!==1?'s':' '} + ` + 
+                                `${that.result.getWhites()} white${that.result.getWhites()!==1?'s':''}`);
             }
         },
         isOver() {
             if (that.proposedCombinations.length >= that.MAX_ATTEMPS) {
                 return true;
             }
-            return that.secretCombination.isWinner(that.playerCombination.get());
+            return that.result.isWinner(that.secretCombination.get().length);
         },
         getGameOverMsg() {
-            return that.secretCombination.isWinner(that.playerCombination.get())?`\n¡Has ganado!\n`:`\nHas perdido... ¡inténtalo de nuevo!\n`;
+            return that.result.isWinner(that.secretCombination.get().length)?`\n¡Has ganado!\n`:`\nHas perdido... ¡inténtalo de nuevo!\n`;
         }
     }
 
@@ -80,19 +81,8 @@ function initCombination() {
             let newColor;
             do {
                 newColor = that.COLOR_OPTIONS[Math.floor(Math.random() * that.COLOR_OPTIONS.length)];
-            } while (that.isColorInArray(newColor, that.colors));
+            } while (initColorChecker().isColorInArray(newColor, that.colors));
             return newColor;
-        },
-        isColorInArray(newColor, colors) {
-            if (colors === undefined) {
-                return false;
-            }
-            for (const color of colors) {
-                if (newColor === color) {
-                    return true;
-                }
-            }
-            return false;
         },
         hasRepeatedColor() {
             for (let i = 0; i < that.colors.length; i++) {
@@ -106,7 +96,7 @@ function initCombination() {
         },
         areColorsInOptions() {
             for (const color of that.colors) {
-                if (!that.isColorInArray(color, that.COLOR_OPTIONS)) {
+                if (!initColorChecker().isColorInArray(color, that.COLOR_OPTIONS)) {
                     return false;
                 }
             }
@@ -137,20 +127,51 @@ function initCombination() {
                 return `Hay colores repetidos`;
             }
             return ``;
+        }
+    }
+}
+
+function initResult() {
+    const that = {
+        blacks: 0,
+        whites: 0
+    }
+    return {
+        getBlacks() {
+            return that.blacks;
         },
-        isWinner(playerColors) {
-            return this.getResult(playerColors).blacks === that.colors.length;
+        getWhites() {
+            return that.whites;
         },
-        getResult(playerColors) {
-            const totals = {blacks: 0, whites: 0};
+        isWinner(maxColors) {
+            return that.blacks === maxColors;
+        },
+        set(playerColors, secretColors) {
+            that.blacks = 0;
+            that.whites = 0;
             for (let i = 0; i < playerColors.length; i++) {
-                if (playerColors[i] === that.colors[i]) {
-                    totals.blacks++;
-                } else if (that.isColorInArray(playerColors[i], that.colors)) {
-                    totals.whites++;
+                if (playerColors[i] === secretColors[i]) {
+                    that.blacks++;
+                } else if (initColorChecker().isColorInArray(playerColors[i], secretColors)) {
+                    that.whites++;
                 }
             }
-            return totals;
+        }
+    }
+}
+
+function initColorChecker() {
+    return {
+        isColorInArray(newColor, colors) {
+            if (colors === undefined) {
+                return false;
+            }
+            for (const color of colors) {
+                if (newColor === color) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
