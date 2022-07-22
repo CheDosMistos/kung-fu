@@ -6,7 +6,6 @@ class Mastermind {
 class Game{
     -MAX_ATTEMPS
     -proposedCombinations
-    -playerMove()
     -askPlayerCombination()
     -addProposedCombination()
     -showAllProposedCombinations()
