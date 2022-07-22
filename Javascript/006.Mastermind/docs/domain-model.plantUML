@@ -15,27 +15,37 @@ class Game{
     +play()
 }
 abstract Combination{
-    -colors
     -COLOR_OPTIONS
     -MAX_COLORS
-    #isColorInArray()
     +get()
     +set()
 }
 class SecretCombination{
     -getNewRandomColor()
     +generate()
-    +getResult()
-    +isWinner()
 }
 class PlayerCombination{
     -hasRepeatedColor()
     -areColorsInOptions()
     +getError()
 }
+class Result{
+    -blacks
+    -whites
+    +getBlacks()
+    +getWhites()
+    +isWinner()
+    +set()
+}
+class ColorChecker{
+    +isColorInArray()
+}
 Mastermind o-- Game
 Game *-- SecretCombination
 Game *-- PlayerCombination
+Game *-- Result
 Combination <|-- SecretCombination
 Combination <|-- PlayerCombination
+Result ..> ColorChecker
+PlayerCombination ..> ColorChecker
 @enduml
